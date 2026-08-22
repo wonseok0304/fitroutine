@@ -374,7 +374,7 @@ h1, h2, h3 {
 }
 .radio-pill input:checked + span {
   background: var(--ink);
-  color: var(--white);
+  color: var(--on-ink);
   border-color: var(--ink);
 }
 
