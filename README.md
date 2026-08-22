@@ -2,7 +2,7 @@
 
 관심사·가능 시간·현재 레벨 세 가지만 입력하면 AI가 이번 주 운동/취미 루틴을 만들어주는 웹 서비스입니다.
 
-- 배포 URL: `(여기에 Vercel 배포 URL을 붙여넣으세요)`
+- 배포 URL: [https://fitroutine-steel.vercel.app](https://fitroutine-steel.vercel.app)
 
 ## 서비스 소개
 
@@ -78,6 +78,30 @@ vercel dev
 4. 배포 전/후 `Settings → Environment Variables`에 `GROQ_API_KEY`를 등록합니다.
 5. 배포가 끝나면 발급된 URL에서 메인/AI 추천/FAQ 페이지와 AI 기능이 정상 동작하는지 확인합니다.
 6. 코드를 수정하면 `git push`만으로 자동 재배포됩니다.
+
+## 스크린샷
+
+### 데스크톱
+
+| 메인 | AI 추천 입력 |
+|---|---|
+| ![데스크톱 메인](screenshots/desktop-01-main.png) | ![데스크톱 AI 추천 입력](screenshots/desktop-02-recommend-form.png) |
+
+| AI 추천 결과 | FAQ |
+|---|---|
+| ![데스크톱 AI 추천 결과](screenshots/desktop-03-recommend-result.png) | ![데스크톱 FAQ](screenshots/desktop-04-faq.png) |
+
+### 모바일
+
+| 메인 | AI 추천 입력 |
+|---|---|
+| ![모바일 메인 1](screenshots/mobile-01-main-01.png) | ![모바일 AI 추천 입력](screenshots/mobile-02-recommend-form.png) |
+
+| AI 추천 결과 | FAQ |
+|---|---|
+| ![모바일 AI 추천 결과](screenshots/mobile-03-recommend-result.png) | ![모바일 FAQ](screenshots/mobile-04-faq.png) |
+
+![모바일 메인 2](screenshots/mobile-01-main-02.png)
 
 ## AI 기능 실패 처리
 
