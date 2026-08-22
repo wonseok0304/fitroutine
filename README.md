@@ -79,6 +79,17 @@ vercel dev
 5. 배포가 끝나면 발급된 URL에서 메인/AI 추천/FAQ 페이지와 AI 기능이 정상 동작하는지 확인합니다.
 6. 코드를 수정하면 `git push`만으로 자동 재배포됩니다.
 
+## 보너스 기능
+
+### 1. 운영 자동화 — 문의하기 폼 (Formspree 연동)
+FAQ 페이지 하단에 문의하기 폼을 추가했습니다. 사용자가 이름/이메일/문의 내용을 입력하고 제출하면, [Formspree](https://formspree.io)(무료 노코드 자동화 도구)를 통해 관리자 이메일로 알림이 전송됩니다.
+- 흐름: 사용자 입력 → `fetch`로 Formspree에 전송 → Formspree가 이메일로 알림 → 관리자가 확인
+- **설정 방법**: [formspree.io](https://formspree.io)에서 무료 가입 후 폼을 생성하면 `https://formspree.io/f/xxxxxxx` 형태의 주소를 받습니다. 이 주소를 `js/contact.js` 파일 상단의 `FORMSPREE_ENDPOINT` 값에 붙여넣으면 바로 작동합니다.
+
+### 2. UX 및 측정 고도화
+- **다크 모드**: 상단 네비게이션의 🌙 버튼으로 라이트/다크 테마를 전환할 수 있습니다. 선택한 테마는 `localStorage`에 저장되어 다음 방문 시에도 유지됩니다.
+- **방문자 분석**: [Vercel Web Analytics](https://vercel.com/docs/analytics)를 연동해 페이지 방문 수, 인기 페이지 등을 측정할 수 있습니다. Vercel 프로젝트 대시보드 → Analytics 탭에서 활성화하면 데이터가 쌓이기 시작합니다. (다크 모드 추가 전/후로 페이지 체류 시간이나 재방문율 변화를 비교해보는 식으로 개선 효과를 확인할 수 있습니다.)
+
 ## 스크린샷
 
 ### 데스크톱
