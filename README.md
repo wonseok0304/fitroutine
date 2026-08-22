@@ -85,10 +85,15 @@ vercel dev
 FAQ 페이지 하단에 문의하기 폼을 추가했습니다. 사용자가 이름/이메일/문의 내용을 입력하고 제출하면, [Formspree](https://formspree.io)(무료 노코드 자동화 도구)를 통해 관리자 이메일로 알림이 전송됩니다.
 - 흐름: 사용자 입력 → `fetch`로 Formspree에 전송 → Formspree가 이메일로 알림 → 관리자가 확인
 - **설정 방법**: [formspree.io](https://formspree.io)에서 무료 가입 후 폼을 생성하면 `https://formspree.io/f/xxxxxxx` 형태의 주소를 받습니다. 이 주소를 `js/contact.js` 파일 상단의 `FORMSPREE_ENDPOINT` 값에 붙여넣으면 바로 작동합니다.
+- **실제 동작 증빙**: 폼 제출 후 실제로 수신된 이메일 알림 화면
+
+![문의하기 이메일 알림 수신 화면](screenshots/bonus-01-contact-email.png)
 
 ### 2. UX 및 측정 고도화
-- **다크 모드**: 상단 네비게이션의 🌙 버튼으로 라이트/다크 테마를 전환할 수 있습니다. 선택한 테마는 `localStorage`에 저장되어 다음 방문 시에도 유지됩니다.
+- **다크 모드**: 상단 네비게이션의 🌙 버튼으로 라이트/다크 테마를 전환할 수 있습니다. 선택한 테마는 `localStorage`에 저장되어 다음 방문 시에도 유지됩니다. (적용 화면은 위 스크린샷 섹션의 "다크 모드" 항목 참고)
 - **방문자 분석**: [Vercel Web Analytics](https://vercel.com/docs/analytics)를 연동해 페이지 방문 수, 인기 페이지 등을 측정할 수 있습니다. Vercel 프로젝트 대시보드 → Analytics 탭에서 활성화하면 데이터가 쌓이기 시작합니다. (다크 모드 추가 전/후로 페이지 체류 시간이나 재방문율 변화를 비교해보는 식으로 개선 효과를 확인할 수 있습니다.)
+
+![Vercel Web Analytics 대시보드](screenshots/bonus-02-analytics.png)
 
 ## 스크린샷
 
@@ -131,6 +136,20 @@ FAQ 페이지 하단에 문의하기 폼을 추가했습니다. 사용자가 이
 | 필수 입력값 누락 | 요청 전 프론트에서 검증, "관심사와 가능 시간을 모두 입력해주세요" 안내 |
 | API 오류 (4xx/5xx) | 응답 상태 코드와 함께 오류 안내 문구 표시 |
 | 응답 지연/타임아웃 | 15초 내 응답 없으면 요청 취소 후 지연 안내 문구 표시 |
+
+## 개발 과정에서 겪은 시행착오
+
+배포와 디버깅 과정에서 실제로 겪은 문제와 해결 과정을 정리했습니다. AI 코딩 도구로 코드를 생성해도 오류 원인을 파악하고 직접 수정 방향을 판단하는 과정이 필요하다는 걸 배웠습니다.
+
+| 문제 | 원인 | 해결 |
+|---|---|---|
+| Vercel 배포 시 "No python entrypoint found" 에러 | Vercel의 Python 프레임워크 빌드 방식이 `api/` 폴더의 진입점을 자동으로 못 찾음 | `pyproject.toml`에 `[tool.vercel] entrypoint` 설정 추가 |
+| 배포 후 어떤 페이지에 접속해도 API 에러 JSON만 표시됨 | Vercel 프로젝트의 Framework Preset이 "Python"으로 설정되어, 정적 파일(HTML/CSS/JS) 없이 모든 요청이 API 함수로 감 | Framework Preset을 "Other"로 변경 (정적 파일 + `api/` 개별 함수 방식으로 전환) |
+| AI 추천 요청 시 502 오류 | 사용하던 Groq 모델(`llama-3.1-8b-instant`)이 서비스 단에서 폐지(deprecated)됨 | 최신 모델(`openai/gpt-oss-20b`)로 교체 |
+| Framework Preset을 바꾼 뒤에도 API 요청이 즉시 502로 실패 | `BaseHTTPRequestHandler` 클래스 기반 함수가 최신 Vercel Python 런타임과 충돌하며 요청 초반에 크래시 | Flask(WSGI) 기반으로 API 코드 재작성 |
+| AI API 호출 시 403 오류 (`error code: 1010`) | Python 기본 `urllib` 요청의 User-Agent가 봇처럼 인식되어 Cloudflare가 차단 | 요청 헤더에 `User-Agent`, `Accept` 값 추가 |
+| `git push` 시 GitHub가 푸시를 거부 (Push Protection) | 로컬 테스트용으로 받은 `.env.local` 파일에 실제 API 키가 포함된 채 커밋됨 | `.env.local`을 `.gitignore`에 추가하고, `git rm --cached`로 추적 해제 후 커밋을 수정(amend)해 재푸시 |
+| 다크 모드 적용 후 일부 제목·버튼 글자가 안 보임 | 테마와 무관하게 항상 같은 값을 갖는 고정 색상 변수(예: 항상 흰색인 값, 항상 어두운 값)를 텍스트 색으로 사용해서, 다크 모드에서 배경과 글자가 같은 톤이 됨 | 라이트/다크 모드에 따라 자동으로 바뀌는 변수로 교체 |
 
 ## 사용한 AI 코딩 도구
 
