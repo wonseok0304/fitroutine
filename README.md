@@ -93,15 +93,17 @@ vercel dev
 
 ### 모바일
 
-| 메인 | AI 추천 입력 |
+| 메인 (1) | 메인 (2) |
 |---|---|
-| ![모바일 메인 1](screenshots/mobile-01-main-01.png) | ![모바일 AI 추천 입력](screenshots/mobile-02-recommend-form.png) |
+| ![모바일 메인 1](screenshots/mobile-01-main-01.png) | ![모바일 메인 2](screenshots/mobile-01-main-02.png) |
 
-| AI 추천 결과 | FAQ |
+| AI 추천 입력 | AI 추천 결과 |
 |---|---|
-| ![모바일 AI 추천 결과](screenshots/mobile-03-recommend-result.png) | ![모바일 FAQ](screenshots/mobile-04-faq.png) |
+| ![모바일 AI 추천 입력](screenshots/mobile-02-recommend-form.png) | ![모바일 AI 추천 결과](screenshots/mobile-03-recommend-result.png) |
 
-![모바일 메인 2](screenshots/mobile-01-main-02.png)
+| FAQ |
+|---|
+| ![모바일 FAQ](screenshots/mobile-04-faq.png) |
 
 ## AI 기능 실패 처리
 
