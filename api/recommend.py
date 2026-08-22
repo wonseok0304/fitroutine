@@ -58,6 +58,8 @@ def handle_recommend():
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",
+            "User-Agent": "Mozilla/5.0 (compatible; FitRoutine/1.0)",
+            "Accept": "application/json",
         },
         method="POST",
     )
