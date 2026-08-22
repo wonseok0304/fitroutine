@@ -98,9 +98,13 @@ FAQ 페이지 하단에 문의하기 폼을 추가했습니다. 사용자가 이
 |---|---|
 | ![데스크톱 메인](screenshots/desktop-01-main.png) | ![데스크톱 AI 추천 입력](screenshots/desktop-02-recommend-form.png) |
 
-| AI 추천 결과 | FAQ |
+| AI 추천 결과 | FAQ (문의하기 포함) |
 |---|---|
 | ![데스크톱 AI 추천 결과](screenshots/desktop-03-recommend-result.png) | ![데스크톱 FAQ](screenshots/desktop-04-faq.png) |
+
+| 다크 모드 |
+|---|
+| ![데스크톱 다크모드](screenshots/desktop-05-darkmode.png) |
 
 ### 모바일
 
@@ -112,9 +116,13 @@ FAQ 페이지 하단에 문의하기 폼을 추가했습니다. 사용자가 이
 |---|---|
 | ![모바일 AI 추천 입력](screenshots/mobile-02-recommend-form.png) | ![모바일 AI 추천 결과](screenshots/mobile-03-recommend-result.png) |
 
-| FAQ |
+| FAQ (1) | FAQ - 문의하기 (2) |
+|---|---|
+| ![모바일 FAQ 1](screenshots/mobile-04-faq-01.png) | ![모바일 FAQ 2](screenshots/mobile-04-faq-02.png) |
+
+| 다크 모드 |
 |---|
-| ![모바일 FAQ](screenshots/mobile-04-faq.png) |
+| ![모바일 다크모드](screenshots/mobile-05-darkmode.png) |
 
 ## AI 기능 실패 처리
 
