@@ -1,9 +1,11 @@
 import json
 import os
-from http.server import BaseHTTPRequestHandler
 import urllib.request
 import urllib.error
 
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
 
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 GROQ_MODEL = "openai/gpt-oss-20b"
@@ -24,73 +26,64 @@ def build_prompt(interest, time_budget, level):
     )
 
 
-class handler(BaseHTTPRequestHandler):
-    def _send_json(self, status, payload):
-        body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
-        self.send_response(status)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
+def handle_recommend():
+    try:
+        data = request.get_json(force=True, silent=True) or {}
+    except Exception:
+        return jsonify({"error": "요청 본문을 읽을 수 없어요."}), 400
 
-    def do_POST(self):
-        try:
-            content_length = int(self.headers.get("Content-Length", 0))
-            raw_body = self.rfile.read(content_length) if content_length else b"{}"
-            data = json.loads(raw_body or b"{}")
-        except (ValueError, json.JSONDecodeError):
-            self._send_json(400, {"error": "요청 본문을 읽을 수 없어요."})
-            return
+    interest = (data.get("interest") or "").strip()
+    time_budget = (data.get("time") or "").strip()
+    level = (data.get("level") or "").strip()
 
-        interest = (data.get("interest") or "").strip()
-        time_budget = (data.get("time") or "").strip()
-        level = (data.get("level") or "").strip()
+    if not interest or not time_budget:
+        return jsonify({"error": "관심사와 가능 시간은 필수입니다."}), 400
 
-        # 필수값 검증 (빈 입력 처리)
-        if not interest or not time_budget:
-            self._send_json(400, {"error": "관심사와 가능 시간은 필수입니다."})
-            return
+    api_key = os.environ.get("GROQ_API_KEY")
+    if not api_key:
+        return jsonify({"error": "서버에 API 키가 설정되어 있지 않습니다."}), 500
 
-        api_key = os.environ.get("GROQ_API_KEY")
-        if not api_key:
-            self._send_json(500, {"error": "서버에 API 키가 설정되어 있지 않습니다."})
-            return
+    prompt = build_prompt(interest, time_budget, level or "초급")
 
-        prompt = build_prompt(interest, time_budget, level or "초급")
+    request_payload = {
+        "model": GROQ_MODEL,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.7,
+        "max_tokens": 500,
+    }
 
-        request_payload = {
-            "model": GROQ_MODEL,
-            "messages": [
-                {"role": "user", "content": prompt}
-            ],
-            "temperature": 0.7,
-            "max_tokens": 500,
-        }
+    req = urllib.request.Request(
+        GROQ_URL,
+        data=json.dumps(request_payload).encode("utf-8"),
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}",
+        },
+        method="POST",
+    )
 
-        req = urllib.request.Request(
-            GROQ_URL,
-            data=json.dumps(request_payload).encode("utf-8"),
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {api_key}",
-            },
-            method="POST",
-        )
+    try:
+        with urllib.request.urlopen(req, timeout=20) as response:
+            result = json.loads(response.read().decode("utf-8"))
+            routine_text = result["choices"][0]["message"]["content"].strip()
+            return jsonify({"routine": routine_text}), 200
 
-        try:
-            with urllib.request.urlopen(req, timeout=12) as response:
-                result = json.loads(response.read().decode("utf-8"))
-                routine_text = result["choices"][0]["message"]["content"].strip()
-                self._send_json(200, {"routine": routine_text})
+    except urllib.error.HTTPError as e:
+        error_body = e.read().decode("utf-8", errors="ignore")
+        return jsonify({"error": f"AI API 오류가 발생했습니다 ({e.code}).", "detail": error_body}), 502
+    except urllib.error.URLError:
+        return jsonify({"error": "AI 응답이 지연되고 있습니다. 잠시 후 다시 시도해주세요."}), 504
+    except (KeyError, IndexError, json.JSONDecodeError):
+        return jsonify({"error": "AI 응답을 처리하는 중 오류가 발생했습니다."}), 500
 
-        except urllib.error.HTTPError as e:
-            # API 오류(4xx/5xx) 처리
-            self._send_json(502, {"error": f"AI API 오류가 발생했습니다 ({e.code})."})
-        except urllib.error.URLError:
-            # 지연/타임아웃 처리
-            self._send_json(504, {"error": "AI 응답이 지연되고 있습니다. 잠시 후 다시 시도해주세요."})
-        except (KeyError, IndexError, json.JSONDecodeError):
-            self._send_json(500, {"error": "AI 응답을 처리하는 중 오류가 발생했습니다."})
 
-    def do_GET(self):
-        self._send_json(405, {"error": "POST 요청만 지원합니다."})
+@app.route("/", methods=["POST"])
+@app.route("/api/recommend", methods=["POST"])
+def recommend():
+    return handle_recommend()
+
+
+@app.route("/", methods=["GET"])
+@app.route("/api/recommend", methods=["GET"])
+def recommend_get():
+    return jsonify({"error": "POST 요청만 지원합니다."}), 405
