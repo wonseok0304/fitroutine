@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>핏루틴 | 나만의 운동·취미 루틴</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a href="index.html" class="logo">핏루틴<span class="logo-dot">.</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html" class="active">메인</a>
+      <a href="recommend.html">AI 추천</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">무료 · 1분이면 충분</p>
+      <h1>뭘 시작할지 <br>모르겠다면,<br><span class="accent">루틴부터</span> 받아보세요</h1>
+      <p class="hero-sub">관심사, 낼 수 있는 시간, 지금 실력만 알려주시면<br>AI가 이번 주 루틴을 티켓처럼 끊어드려요.</p>
+      <a href="recommend.html" class="btn-primary">내 루틴 받기 →</a>
+    </div>
+
+    <div class="hero-ticket" aria-hidden="true">
+      <div class="ticket">
+        <div class="ticket-top">
+          <span class="ticket-label">WEEKLY ROUTINE</span>
+          <span class="ticket-no">NO. 07</span>
+        </div>
+        <ul class="ticket-days">
+          <li><span class="day">MON</span><span class="task">가벼운 러닝 20분</span></li>
+          <li><span class="day">WED</span><span class="task">홈트레이닝 30분</span></li>
+          <li><span class="day">FRI</span><span class="task">스트레칭 + 산책</span></li>
+        </ul>
+        <div class="ticket-stub">
+          <span>LEVEL · 초급</span>
+          <span>TIME · 20–30min</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-band">
+    <div class="band-inner">
+      <div class="band-item">
+        <span class="band-num">01</span>
+        <h3>입력은 30초</h3>
+        <p>관심사, 가능 시간, 레벨 세 가지만 고르면 끝이에요.</p>
+      </div>
+      <div class="band-item">
+        <span class="band-num">02</span>
+        <h3>AI가 루틴 설계</h3>
+        <p>초보자도 무리 없이 따라할 수 있는 주간 루틴을 만들어요.</p>
+      </div>
+      <div class="band-item">
+        <span class="band-num">03</span>
+        <h3>바로 시작</h3>
+        <p>결과를 그대로 저장하거나 캡처해서 이번 주부터 실천하세요.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <h2>오늘부터, 작게라도 시작해봐요</h2>
+    <a href="recommend.html" class="btn-primary">AI 루틴 추천받기</a>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>핏루틴 · 취미·운동 루틴 추천 서비스 (교육용 프로젝트)</p>
+</footer>
+
+<script src="js/nav.js"></script>
+</body>
+</html>
